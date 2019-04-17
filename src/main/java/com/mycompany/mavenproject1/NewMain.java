@@ -1,8 +1,6 @@
 package com.mycompany.mavenproject1;
 
 import java.io.File;
-import java.sql.DriverManager;
-import java.util.Iterator;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.Node;
@@ -10,65 +8,22 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.driver.v1.GraphDatabase;
 
-/*
-import org.neo4j.driver.v1.*;
-import static org.neo4j.driver.v1.Values.parameters;*/
+
 public class NewMain {
 
-    /*
-    private final Driver driver;
+    private static final String DB_PATH = "C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j-community-3.5.4\\data\\databases\\graph.db";
+    private GraphDatabaseService graphDb;
 
-    public NewMain(String uri, String user, String password) {
-        driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
+    public static void main(String[] args) {
+
+        NewMain hello = new NewMain();
+        deleteFileOrDirectory(new File(DB_PATH));
+        hello.createDb();
+        hello.shutDown();
+
     }
 
-    public void close() throws Exception {
-        driver.close();
-    }
-
-    private void addNode(String name) {
-        // Sessions are lightweight and disposable connection wrappers.
-        try (Session session = driver.session()) {
-            // Wrapping Cypher in an explicit transaction provides atomicity
-            // and makes handling errors much easier.
-            try (Transaction tx = session.beginTransaction()) {
-                tx.run("MERGE (a:Node {name: {x}})", parameters("x", name));
-                tx.success();  // Mark this write as successful.
-            }
-        }
-    }
-
-    private void printPeople(String initial) {
-        try (Session session = driver.session()) {
-            // Auto-commit transactions are a quick and easy way to wrap a read.
-            StatementResult result = session.run(
-                    "MATCH (a:Person) WHERE a.name STARTS WITH {x} RETURN a.name AS name",
-                    parameters("x", initial));
-            // Each Cypher execution returns a stream of records.
-            while (result.hasNext()) {
-                Record record = result.next();
-                // Values can be extracted from a record by index or name.
-                System.out.println(record.get("name").asString());
-            }
-        }
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        NewMain example = new NewMain("bolt://localhost:7687", "neo4j", "oi");
-        example.addNode("Ada");
-        example.addNode("Alice");
-        example.addNode("Fernandoo");
-        example.printPeople("A");
-        example.close();
-
-    }*/
- /*    
-    A parte comentada é a outra forma de manipular o banco
-     */
-    
     // tipos de nós que haverão
     public enum NodeType implements Label {
         Person, Course;
@@ -79,18 +34,13 @@ public class NewMain {
         Knows, BelongsTo;
     }
 
-    public static void main(String[] args) {
-        
-        // deletar diretório do banco de dados
-        deleteFileOrDirectory(new File("C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j-community-3.5.4\\data\\databases\\graph.db"));
-        
+    // Adiciona itens no banco de dados
+    void createDb() {
 
-        // cria o diretório do banco de dados para começar um grafo zerado
-        GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File("C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j-community-3.5.4\\data\\databases\\graph.db"));
-        
-        
+        // Acessa o banco de dados do grafo. Caso o banco de dados não exista, ele é criado.
+        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
+
         try (Transaction tx = graphDb.beginTx()) {
-
 
             // CRIANDO GRAFO
             Node bobNode = graphDb.createNode(NodeType.Person);
@@ -130,10 +80,15 @@ public class NewMain {
             tx.success();
 
         }
-        graphDb.shutdown();
 
     }
 
+    // Se desconecta do banco de dados
+    void shutDown() {
+        graphDb.shutdown();
+    }
+
+    // Deleta o banco de dados existente
     private static void deleteFileOrDirectory(File file) {
         if (file.exists()) {
             if (file.isDirectory()) {
@@ -144,4 +99,5 @@ public class NewMain {
             file.delete();
         }
     }
+
 }
