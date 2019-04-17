@@ -2,6 +2,7 @@ package com.mycompany.mavenproject1;
 
 import java.io.File;
 import java.sql.DriverManager;
+import java.util.Iterator;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.Node;
@@ -68,25 +69,30 @@ public class NewMain {
     A parte comentada é a outra forma de manipular o banco
      */
     
-    
-    
-    
-    
-    
+    // tipos de nós que haverão
     public enum NodeType implements Label {
         Person, Course;
     }
 
+    // tipos de relação existente entre os nós
     public enum RelationType implements RelationshipType {
         Knows, BelongsTo;
     }
 
     public static void main(String[] args) {
+        
+        // deletar diretório do banco de dados
+        deleteFileOrDirectory(new File("C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j-community-3.5.4\\data\\databases\\graph.db"));
+        
 
-        GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File("C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j\\neo4j-community-3.5.4\\data\\databases\\graph.db"));
-
+        // cria o diretório do banco de dados para começar um grafo zerado
+        GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File("C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j-community-3.5.4\\data\\databases\\graph.db"));
+        
+        
         try (Transaction tx = graphDb.beginTx()) {
-           
+
+
+            // CRIANDO GRAFO
             Node bobNode = graphDb.createNode(NodeType.Person);
             bobNode.setProperty("PID", 5001);
             bobNode.setProperty("Name", "Bob");
@@ -123,9 +129,19 @@ public class NewMain {
 
             tx.success();
 
-
         }
         graphDb.shutdown();
 
+    }
+
+    private static void deleteFileOrDirectory(File file) {
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                for (File child : file.listFiles()) {
+                    deleteFileOrDirectory(child);
+                }
+            }
+            file.delete();
+        }
     }
 }
