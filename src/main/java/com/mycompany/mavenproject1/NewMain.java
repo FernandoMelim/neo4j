@@ -14,7 +14,6 @@ public class NewMain {
 
     private static final String DB_PATH = "C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j-community-3.5.4\\data\\databases\\graph.db";
     private GraphDatabaseService graphDb;
-    GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector("0");
 
     public static void main(String[] args) {
 
