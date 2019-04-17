@@ -8,12 +8,13 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-
+import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 
 public class NewMain {
 
     private static final String DB_PATH = "C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j-community-3.5.4\\data\\databases\\graph.db";
     private GraphDatabaseService graphDb;
+    GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector("0");
 
     public static void main(String[] args) {
 
@@ -36,7 +37,6 @@ public class NewMain {
 
     // Adiciona itens no banco de dados
     void createDb() {
-
         // Acessa o banco de dados do grafo. Caso o banco de dados não exista, ele é criado.
         graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(DB_PATH));
 
