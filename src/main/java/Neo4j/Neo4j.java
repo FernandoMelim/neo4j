@@ -8,12 +8,14 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.ResourceIterable;
+import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 public class Neo4j {
 
-    private static final String DB_PATH = "C:\\Users\\ferna\\OneDrive\\Documentos\\NetBeansProjects\\neo4j-community-3.5.4\\data\\databases\\graph.db";
+    private static final String DB_PATH = "C:\\neo4j-community-3.5.4\\data\\databases\\graph.db";
     private GraphDatabaseService graphDb;
 
     // tipos de nós que haverão
@@ -63,6 +65,25 @@ public class Neo4j {
                     }
                 }
             }
+
+            
+            
+            //Iterable implementado
+            /*
+            ResourceIterable iterable = graphDb.getAllNodes();
+            ResourceIterator a = iterable.iterator();
+            Node node;
+
+            while (a.hasNext()) {
+                node = (Node) a.next();
+
+                System.out.println("ID: " + node.getId() + " Grau: " + node.getDegree());
+                
+
+            }
+            */
+            
+            
 
             tx.success();
 
